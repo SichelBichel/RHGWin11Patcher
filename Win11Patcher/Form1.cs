@@ -198,6 +198,21 @@ namespace Win11Patcher
         {
             ClearConsole();
         }
+
+        private void UI_KillOneDrive(object sender, EventArgs e)
+        {
+            _Core.KillOneDrive();
+        }
+
+        private void UI_EdgeRipper(object sender, EventArgs e)
+        {
+            _Core.EdgeRipper();
+        }
+
+        private void UI_InstallFirefox(object sender, EventArgs e)
+        {
+            _Core.InstallFirefox();
+        }
     }
 
 

@@ -27,12 +27,12 @@ namespace Win11Patcher
                 Debug.WriteLine($"Patching {function}...");
                 Console.WriteLine($"Patching {function}...");
                 Process process = new Process();
-                    process.StartInfo.FileName = "reg.exe";
-                    process.StartInfo.Arguments = key;
-                    process.StartInfo.RedirectStandardOutput = true; 
-                    process.StartInfo.RedirectStandardError = true;  
-                    process.StartInfo.UseShellExecute = false; 
-                    process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.FileName = "reg.exe";
+                process.StartInfo.Arguments = key;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
 
                 process.Start();
 
@@ -41,33 +41,33 @@ namespace Win11Patcher
 
                 process.WaitForExit();
 
-                    if (!string.IsNullOrEmpty(errors))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(errors);
-                        Debug.WriteLine(errors);
-                        Console.ForegroundColor= ConsoleColor.White;
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(output);
-                        Debug.WriteLine(output);
-                        Console.ForegroundColor= ConsoleColor.White;
-                    }
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(errors);
+                    Debug.WriteLine(errors);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(output);
+                    Debug.WriteLine(output);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"ERROR: Reg Injection Failed @{function}: " +ex.Message);
+                Console.WriteLine($"ERROR: Reg Injection Failed @{function}: " + ex.Message);
                 Debug.WriteLine("ERROR: Reg Injection Failed @{function}");
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
 
-      
+
 
 
         //Explorer
@@ -117,7 +117,7 @@ namespace Win11Patcher
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR (@EXP) Reg Injection Failed: " +ex.Message);
+                Console.WriteLine("ERROR (@EXP) Reg Injection Failed: " + ex.Message);
                 Debug.WriteLine("ERROR (@EXP) Reg Injection Failed");
                 Console.ForegroundColor = ConsoleColor.White;
             }
@@ -207,7 +207,7 @@ namespace Win11Patcher
         {
             try
             {
-                Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Enabling Extensions...");
 
                 string registryKeyPath = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
@@ -238,7 +238,7 @@ namespace Win11Patcher
             try
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Bypassing Edge Guestscreen...");
+                Console.WriteLine("Accessing Chrome...");
 
                 string downloadUrl = "https://dl.google.com/chrome/install/latest/chrome_installer.exe";
                 string tempPath = Path.Combine(Path.GetTempPath(), "chrome_installer.exe");
@@ -258,7 +258,7 @@ namespace Win11Patcher
                 process.Start();
                 process.WaitForExit();
 
-                Console.ForegroundColor= ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Installation Completed!");
                 Console.ForegroundColor = ConsoleColor.White;
 
@@ -329,8 +329,8 @@ namespace Win11Patcher
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(ex.Message);
-                    Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(ex.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
         }
@@ -398,6 +398,278 @@ namespace Win11Patcher
         }
 
 
+        //OneDrive
+
+        public void KillOneDrive()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = "taskkill",
+                    Arguments = "/f /im OneDrive.exe",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true
+                })?.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+            string systemRoot = Environment.GetEnvironmentVariable("SystemRoot");
+            string setupPath = Environment.Is64BitOperatingSystem ?
+                Path.Combine(systemRoot, "SysWOW64", "OneDriveSetup.exe") :
+                Path.Combine(systemRoot, "System32", "OneDriveSetup.exe");
+
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = setupPath,
+                    Arguments = "/uninstall",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true
+                })?.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor= ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+            try
+            {
+                string[] regPaths =
+                {
+                @"SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+                @"SOFTWARE\WOW6432Node\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
+            };
+
+                foreach (var path in regPaths)
+                {
+                    using (RegistryKey key = Registry.LocalMachine.OpenSubKey(path, writable: true))
+                    {
+                        key?.SetValue("System.IsPinnedToNameSpaceTree", 0, RegistryValueKind.DWord);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string oneDriveFolder = Path.Combine(userProfile, "OneDrive");
+
+            try
+            {
+                if (Directory.Exists(oneDriveFolder))
+                {
+                    Directory.Delete(oneDriveFolder, recursive: true);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("OneDrive Path Destroyed");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Uninstalled OneDrive");
+            Console.ForegroundColor= ConsoleColor.White;
+        }
+
+
+
+
+
+
+        //Edge
+        public void EdgeRipper()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Ripping out Edge...");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string edgeInstallerPath = Path.Combine(programFiles, "Microsoft", "Edge", "Application");
+
+            if (!Directory.Exists(edgeInstallerPath))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Edge seems not to be installed.");
+                return;
+            }
+
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Running PowerShell command to remove Edge...");
+
+                Process powerShellProcess = new Process();
+                powerShellProcess.StartInfo.FileName = "powershell.exe";
+                powerShellProcess.StartInfo.Arguments = "-Command \"Get-AppxPackage *Microsoft.MicrosoftEdge* | Remove-AppxPackage\"";
+                powerShellProcess.StartInfo.Verb = "runas"; 
+                powerShellProcess.StartInfo.UseShellExecute = false;
+                powerShellProcess.StartInfo.CreateNoWindow = true;
+                powerShellProcess.Start();
+                powerShellProcess.WaitForExit();
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("PowerShell uninstallation executed.");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error during PowerShell uninstallation: " + ex.Message);
+            }
+
+            try
+            {
+                string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string edgeDataPath = Path.Combine(userProfile, "AppData", "Local", "Microsoft", "Edge");
+
+                if (Directory.Exists(edgeDataPath))
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Deleting Edge data folder...");
+
+                    Directory.Delete(edgeDataPath, true);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge data deleted.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error during Edge data deletion: " + ex.Message);
+            }
+
+            try
+            {
+                string edgeProgramFolder = Path.Combine(programFiles, "Microsoft", "Edge");
+
+                if (Directory.Exists(edgeProgramFolder))
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Deleting Edge installation folder...");
+
+                    Directory.Delete(edgeProgramFolder, true);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge installation folder deleted.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error during Edge installation folder deletion: " + ex.Message);
+            }
+
+            try
+            {
+                string webView2Path = Path.Combine(programFiles, "Microsoft", "EdgeWebView2");
+
+                if (Directory.Exists(webView2Path))
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Deleting Edge WebView2 folder...");
+
+                    Directory.Delete(webView2Path, true);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge WebView2 folder deleted.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error during WebView2 folder deletion: " + ex.Message);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Edge should be fully removed after a restart. Please restart your system.");
+            RemoveEdgeShortcuts();
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public void RemoveEdgeShortcuts()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Removing Edge Shortcuts...");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            string desktopFolder = Path.Combine(userProfile, "Desktop");
+            string edgeDesktopShortcut = Path.Combine(desktopFolder, "Microsoft Edge.lnk");
+
+            if (File.Exists(edgeDesktopShortcut))
+            {
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Deleting Edge desktop shortcut...");
+                    File.Delete(edgeDesktopShortcut);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge desktop shortcut deleted.");
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error deleting desktop shortcut: " + ex.Message);
+                }
+            }
+
+            string startMenuFolder = Path.Combine(userProfile, "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs");
+            string[] startMenuShortcuts = Directory.GetFiles(startMenuFolder, "*Microsoft Edge*.lnk");
+
+            foreach (var shortcut in startMenuShortcuts)
+            {
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"Deleting Edge start menu shortcut: {Path.GetFileName(shortcut)}...");
+                    File.Delete(shortcut);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge start menu shortcut deleted.");
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error deleting start menu shortcut {Path.GetFileName(shortcut)}: " + ex.Message);
+                }
+            }
+
+            string taskbarFolder = Path.Combine(userProfile, "AppData", "Roaming", "Microsoft", "Internet Explorer", "Quick Launch", "User Pinned", "TaskBar");
+            string edgeTaskbarShortcut = Path.Combine(taskbarFolder, "Microsoft Edge.lnk");
+
+            if (File.Exists(edgeTaskbarShortcut))
+            {
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Deleting Edge taskbar shortcut...");
+                    File.Delete(edgeTaskbarShortcut);
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Edge taskbar shortcut deleted.");
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error deleting taskbar shortcut: " + ex.Message);
+                }
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Edge shortcuts have been removed.");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+
+
 
 
         //CoPilot
@@ -406,6 +678,7 @@ namespace Win11Patcher
         {
             try
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("Setting Registry-keys...");
                 string[] registryPaths =
                 {
@@ -439,7 +712,6 @@ namespace Win11Patcher
                 }
                 Console.WriteLine("Registry set.");
 
-                // Entferne Apps
                 Console.WriteLine("Removing AI Apps...");
                 string[] appPackages =
                 {
@@ -482,6 +754,49 @@ namespace Win11Patcher
             }
         }
 
+
+
+        //Firefox
+
+        public void InstallFirefox()
+        {
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                string downloadUrl = "https://download.mozilla.org/?product=firefox-latest&os=win&lang=en-US"; 
+                string tempPath = Path.Combine(Path.GetTempPath(), "firefox_installer.exe");
+
+                using (WebClient client = new WebClient())
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Downloading Firefox...");
+                    client.DownloadFile(downloadUrl, tempPath);
+                }
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Installing Firefox...");
+                Process process = new Process();
+                process.StartInfo.FileName = tempPath;
+                process.StartInfo.Arguments = "/silent /install"; 
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Installation Completed!");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                File.Delete(tempPath); 
+
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
 
 
 

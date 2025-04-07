@@ -43,6 +43,10 @@
             buttonClearConsole = new Button();
             buttonDarkMode = new Button();
             label1 = new Label();
+            button1 = new Button();
+            button2 = new Button();
+            label2 = new Label();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -92,13 +96,13 @@
             buttonBypassEdge.Name = "buttonBypassEdge";
             buttonBypassEdge.Size = new Size(146, 40);
             buttonBypassEdge.TabIndex = 6;
-            buttonBypassEdge.Text = "Install Chrome (Edge Bypass)";
+            buttonBypassEdge.Text = "Install Chrome";
             buttonBypassEdge.UseVisualStyleBackColor = true;
             buttonBypassEdge.Click += UI_BypassEdge;
             // 
             // buttonPWM
             // 
-            buttonPWM.Location = new Point(180, 248);
+            buttonPWM.Location = new Point(180, 294);
             buttonPWM.Name = "buttonPWM";
             buttonPWM.Size = new Size(146, 40);
             buttonPWM.TabIndex = 7;
@@ -129,7 +133,7 @@
             // 
             // buttonDisableRecall
             // 
-            buttonDisableRecall.Location = new Point(180, 340);
+            buttonDisableRecall.Location = new Point(180, 386);
             buttonDisableRecall.Name = "buttonDisableRecall";
             buttonDisableRecall.Size = new Size(146, 40);
             buttonDisableRecall.TabIndex = 13;
@@ -139,7 +143,7 @@
             // 
             // buttonKillCopilot
             // 
-            buttonKillCopilot.Location = new Point(180, 294);
+            buttonKillCopilot.Location = new Point(180, 340);
             buttonKillCopilot.Name = "buttonKillCopilot";
             buttonKillCopilot.Size = new Size(146, 40);
             buttonKillCopilot.TabIndex = 14;
@@ -187,13 +191,57 @@
             label1.Name = "label1";
             label1.Size = new Size(41, 15);
             label1.TabIndex = 20;
-            label1.Text = "V 0.2.1";
+            label1.Text = "V 1.0.0";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(180, 432);
+            button1.Name = "button1";
+            button1.Size = new Size(146, 40);
+            button1.TabIndex = 21;
+            button1.Text = "Remove OneDrive";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += UI_KillOneDrive;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(28, 432);
+            button2.Name = "button2";
+            button2.Size = new Size(146, 40);
+            button2.TabIndex = 22;
+            button2.Text = "Remove Edge";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += UI_EdgeRipper;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(380, 6);
+            label2.Name = "label2";
+            label2.Size = new Size(48, 15);
+            label2.TabIndex = 23;
+            label2.Text = "Output:";
+            // 
+            // button3
+            // 
+            button3.ImageAlign = ContentAlignment.MiddleRight;
+            button3.Location = new Point(180, 248);
+            button3.Name = "button3";
+            button3.Size = new Size(146, 40);
+            button3.TabIndex = 24;
+            button3.Text = "Install Firefox";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += UI_InstallFirefox;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1023, 513);
+            Controls.Add(button3);
+            Controls.Add(label2);
+            Controls.Add(button2);
+            Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(buttonClearConsole);
             Controls.Add(pictureBox1);
@@ -233,5 +281,9 @@
         private Button buttonClearConsole;
         private Button buttonDarkMode;
         private Label label1;
+        private Button button1;
+        private Button button2;
+        private Label label2;
+        private Button button3;
     }
 }
