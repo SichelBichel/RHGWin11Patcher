@@ -47,12 +47,13 @@
             button2 = new Button();
             label2 = new Label();
             button3 = new Button();
+            linkLabel1 = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // buttonContextMenu
             // 
-            buttonContextMenu.Location = new Point(28, 202);
+            buttonContextMenu.Location = new Point(27, 202);
             buttonContextMenu.Name = "buttonContextMenu";
             buttonContextMenu.Size = new Size(146, 40);
             buttonContextMenu.TabIndex = 0;
@@ -62,7 +63,7 @@
             // 
             // buttonExplorer
             // 
-            buttonExplorer.Location = new Point(28, 248);
+            buttonExplorer.Location = new Point(27, 248);
             buttonExplorer.Name = "buttonExplorer";
             buttonExplorer.Size = new Size(146, 40);
             buttonExplorer.TabIndex = 2;
@@ -72,7 +73,7 @@
             // 
             // buttonTaskBar
             // 
-            buttonTaskBar.Location = new Point(28, 340);
+            buttonTaskBar.Location = new Point(27, 340);
             buttonTaskBar.Name = "buttonTaskBar";
             buttonTaskBar.Size = new Size(146, 40);
             buttonTaskBar.TabIndex = 4;
@@ -82,7 +83,7 @@
             // 
             // buttonShowExtensions
             // 
-            buttonShowExtensions.Location = new Point(28, 294);
+            buttonShowExtensions.Location = new Point(27, 294);
             buttonShowExtensions.Name = "buttonShowExtensions";
             buttonShowExtensions.Size = new Size(146, 40);
             buttonShowExtensions.TabIndex = 5;
@@ -92,7 +93,7 @@
             // 
             // buttonBypassEdge
             // 
-            buttonBypassEdge.Location = new Point(180, 202);
+            buttonBypassEdge.Location = new Point(179, 202);
             buttonBypassEdge.Name = "buttonBypassEdge";
             buttonBypassEdge.Size = new Size(146, 40);
             buttonBypassEdge.TabIndex = 6;
@@ -102,7 +103,7 @@
             // 
             // buttonPWM
             // 
-            buttonPWM.Location = new Point(180, 294);
+            buttonPWM.Location = new Point(179, 294);
             buttonPWM.Name = "buttonPWM";
             buttonPWM.Size = new Size(146, 40);
             buttonPWM.TabIndex = 7;
@@ -113,7 +114,7 @@
             // buttonApply
             // 
             buttonApply.BackColor = Color.Yellow;
-            buttonApply.Location = new Point(28, 156);
+            buttonApply.Location = new Point(27, 156);
             buttonApply.Name = "buttonApply";
             buttonApply.Size = new Size(146, 40);
             buttonApply.TabIndex = 8;
@@ -124,7 +125,7 @@
             // rtbConsole
             // 
             rtbConsole.BackColor = SystemColors.ControlText;
-            rtbConsole.Location = new Point(380, 24);
+            rtbConsole.Location = new Point(380, 38);
             rtbConsole.Name = "rtbConsole";
             rtbConsole.ReadOnly = true;
             rtbConsole.Size = new Size(617, 466);
@@ -133,7 +134,7 @@
             // 
             // buttonDisableRecall
             // 
-            buttonDisableRecall.Location = new Point(180, 386);
+            buttonDisableRecall.Location = new Point(179, 386);
             buttonDisableRecall.Name = "buttonDisableRecall";
             buttonDisableRecall.Size = new Size(146, 40);
             buttonDisableRecall.TabIndex = 13;
@@ -143,7 +144,7 @@
             // 
             // buttonKillCopilot
             // 
-            buttonKillCopilot.Location = new Point(180, 340);
+            buttonKillCopilot.Location = new Point(179, 340);
             buttonKillCopilot.Name = "buttonKillCopilot";
             buttonKillCopilot.Size = new Size(146, 40);
             buttonKillCopilot.TabIndex = 14;
@@ -156,7 +157,7 @@
             pictureBox1.ErrorImage = RHGWin11Patcher.Properties.Resources.ReHoGaBanner3_0_Transparent;
             pictureBox1.Image = RHGWin11Patcher.Properties.Resources.ReHoGaBanner3_0_Transparent;
             pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
-            pictureBox1.Location = new Point(28, 24);
+            pictureBox1.Location = new Point(27, 24);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(298, 126);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -166,7 +167,7 @@
             // buttonClearConsole
             // 
             buttonClearConsole.BackColor = Color.LawnGreen;
-            buttonClearConsole.Location = new Point(180, 156);
+            buttonClearConsole.Location = new Point(179, 156);
             buttonClearConsole.Name = "buttonClearConsole";
             buttonClearConsole.Size = new Size(146, 40);
             buttonClearConsole.TabIndex = 17;
@@ -176,7 +177,7 @@
             // 
             // buttonDarkMode
             // 
-            buttonDarkMode.Location = new Point(28, 386);
+            buttonDarkMode.Location = new Point(27, 386);
             buttonDarkMode.Name = "buttonDarkMode";
             buttonDarkMode.Size = new Size(146, 40);
             buttonDarkMode.TabIndex = 9;
@@ -191,11 +192,11 @@
             label1.Name = "label1";
             label1.Size = new Size(41, 15);
             label1.TabIndex = 20;
-            label1.Text = "V 1.0.0";
+            label1.Text = "V 1.0.2";
             // 
             // button1
             // 
-            button1.Location = new Point(180, 432);
+            button1.Location = new Point(179, 432);
             button1.Name = "button1";
             button1.Size = new Size(146, 40);
             button1.TabIndex = 21;
@@ -205,7 +206,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(28, 432);
+            button2.Location = new Point(27, 432);
             button2.Name = "button2";
             button2.Size = new Size(146, 40);
             button2.TabIndex = 22;
@@ -216,16 +217,17 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(380, 6);
+            label2.Location = new Point(380, 20);
             label2.Name = "label2";
             label2.Size = new Size(48, 15);
             label2.TabIndex = 23;
             label2.Text = "Output:";
+            label2.Click += label2_Click;
             // 
             // button3
             // 
             button3.ImageAlign = ContentAlignment.MiddleRight;
-            button3.Location = new Point(180, 248);
+            button3.Location = new Point(179, 248);
             button3.Name = "button3";
             button3.Size = new Size(146, 40);
             button3.TabIndex = 24;
@@ -233,11 +235,24 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += UI_InstallFirefox;
             // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(35, 489);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(290, 15);
+            linkLabel1.TabIndex = 26;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "https://rehoga-interactive.com/windows-11-patcher/";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            linkLabel1.Click += UI_OpenWebsite;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1023, 513);
+            ClientSize = new Size(1023, 519);
+            Controls.Add(linkLabel1);
             Controls.Add(button3);
             Controls.Add(label2);
             Controls.Add(button2);
@@ -285,5 +300,6 @@
         private Button button2;
         private Label label2;
         private Button button3;
+        private LinkLabel linkLabel1;
     }
 }

@@ -402,8 +402,14 @@ namespace Win11Patcher
 
         public void KillOneDrive()
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Starting OneDrive removal...");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            // Stoppe OneDrive, falls es läuft
             try
             {
+                Console.WriteLine("Killing OneDrive processes...");
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = "taskkill",
@@ -415,73 +421,148 @@ namespace Win11Patcher
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error killing OneDrive: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
-            string systemRoot = Environment.GetEnvironmentVariable("SystemRoot");
-            string setupPath = Environment.Is64BitOperatingSystem ?
-                Path.Combine(systemRoot, "SysWOW64", "OneDriveSetup.exe") :
-                Path.Combine(systemRoot, "System32", "OneDriveSetup.exe");
-
+            // Deinstalliere OneDrive über die Windows Setup
             try
             {
-                Process.Start(new ProcessStartInfo
+                Console.WriteLine("Uninstalling OneDrive...");
+                string systemRoot = Environment.GetEnvironmentVariable("SystemRoot");
+                string setupPath = Path.Combine(systemRoot, "System32", "OneDriveSetup.exe");
+
+                if (File.Exists(setupPath))
                 {
-                    FileName = setupPath,
-                    Arguments = "/uninstall",
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true
-                })?.WaitForExit();
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = setupPath,
+                        Arguments = "/uninstall",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    })?.WaitForExit();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("OneDriveSetup.exe not found.");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor= ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error uninstalling OneDrive: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
+            // Entferne OneDrive aus der Registrierung
             try
             {
+                Console.WriteLine("Removing OneDrive registry entries...");
                 string[] regPaths =
                 {
-                @"SOFTWARE\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
-                @"SOFTWARE\WOW6432Node\Classes\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-            };
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+            @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{018D5C66-4533-4307-9B53-224DE2ED1FE6}",
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\OneDrive",
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons"
+        };
 
                 foreach (var path in regPaths)
                 {
                     using (RegistryKey key = Registry.LocalMachine.OpenSubKey(path, writable: true))
                     {
-                        key?.SetValue("System.IsPinnedToNameSpaceTree", 0, RegistryValueKind.DWord);
+                        if (key != null)
+                        {
+                            key.DeleteSubKeyTree("", false);
+                            Console.WriteLine($"Removed registry key: {path}");
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error removing registry keys: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
-            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string oneDriveFolder = Path.Combine(userProfile, "OneDrive");
-
+            // Entferne Taskleisten- und Startmenü-Verknüpfungen
             try
             {
-                if (Directory.Exists(oneDriveFolder))
+                Console.WriteLine("Removing OneDrive from Taskbar and Start Menu...");
+
+                // Taskbar shortcuts
+                string taskbarPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Roaming", "Microsoft", "Internet Explorer", "Quick Launch", "User Pinned", "TaskBar");
+                string taskbarShortcut = Path.Combine(taskbarPath, "OneDrive.lnk");
+                if (File.Exists(taskbarShortcut))
                 {
-                    Directory.Delete(oneDriveFolder, recursive: true);
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("OneDrive Path Destroyed");
+                    File.Delete(taskbarShortcut);
+                    Console.WriteLine("OneDrive Taskbar shortcut removed.");
+                }
+
+                // Start Menu shortcuts
+                string startMenuPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs");
+                string[] startMenuShortcuts = Directory.GetFiles(startMenuPath, "*OneDrive*.lnk");
+                foreach (var shortcut in startMenuShortcuts)
+                {
+                    File.Delete(shortcut);
+                    Console.WriteLine($"Removed Start Menu shortcut: {shortcut}");
                 }
             }
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Error removing OneDrive shortcuts: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
             }
+
+            // Entferne OneDrive aus Autostart
+            try
+            {
+                Console.WriteLine("Removing OneDrive from Autostart...");
+                string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string oneDriveRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(oneDriveRegistryPath, writable: true))
+                {
+                    if (key != null)
+                    {
+                        key.DeleteValue("OneDrive", false);
+                        Console.WriteLine("OneDrive removed from Autostart.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error removing OneDrive from Autostart: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+            // Entferne OneDrive-Daten im Benutzerprofil, wenn gewünscht
+            string oneDriveFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive");
+            try
+            {
+                if (Directory.Exists(oneDriveFolder))
+                {
+                    // Nur löschen, wenn du möchtest, dass der OneDrive-Ordner auch gelöscht wird:
+                    // Directory.Delete(oneDriveFolder, recursive: true);
+                    Console.WriteLine("OneDrive folder remains intact.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error handling OneDrive folder: {ex.Message}");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Uninstalled OneDrive");
-            Console.ForegroundColor= ConsoleColor.White;
+            Console.WriteLine("OneDrive successfully removed.");
+            Console.ForegroundColor = ConsoleColor.White;
         }
+    
+
 
 
 

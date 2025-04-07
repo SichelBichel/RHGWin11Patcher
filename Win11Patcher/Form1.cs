@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using System;
 using System.Text;
 using System.Diagnostics;
+using System.Security.Policy;
 namespace Win11Patcher
 {
     public partial class Form1 : Form
@@ -212,6 +213,38 @@ namespace Win11Patcher
         private void UI_InstallFirefox(object sender, EventArgs e)
         {
             _Core.InstallFirefox();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void UI_OpenWebsite(object sender, EventArgs e)
+        {
+            string url = "https://rehoga-interactive.com/windows-11-patcher";
+
+            try
+            {
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                Console.WriteLine("URL geöffnet: " + url);
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Fehler beim Öffnen der URL: " + ex.Message);
+                Console.ResetColor();
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
