@@ -121,7 +121,11 @@ namespace Win11Patcher
         //unsured
         private void Form1_Load(object sender, EventArgs e)
         {
-            Console.WriteLine("Console retracted, Form initialized. Welcome to W11P");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Console retracted, Form initialized. ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(" Welcome to W11P!");
+            Console.ForegroundColor= ConsoleColor.White;
         }
 
         private void UI_SoundMixer(object sender, EventArgs e)
@@ -245,6 +249,18 @@ namespace Win11Patcher
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void UI_StopUpdates(object sender, EventArgs e)
+        {
+            _Core.StopUpdates();
+        }
+
+        private void UI_KillCortana(object sender, EventArgs e)
+        {
+            _Core.CortanaRipper
+                
+                ();
         }
     }
 

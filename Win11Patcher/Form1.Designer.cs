@@ -48,6 +48,8 @@
             label2 = new Label();
             button3 = new Button();
             linkLabel1 = new LinkLabel();
+            button4 = new Button();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -128,7 +130,7 @@
             rtbConsole.Location = new Point(380, 38);
             rtbConsole.Name = "rtbConsole";
             rtbConsole.ReadOnly = true;
-            rtbConsole.Size = new Size(617, 466);
+            rtbConsole.Size = new Size(631, 498);
             rtbConsole.TabIndex = 12;
             rtbConsole.Text = "";
             // 
@@ -192,7 +194,7 @@
             label1.Name = "label1";
             label1.Size = new Size(41, 15);
             label1.TabIndex = 20;
-            label1.Text = "V 1.0.2";
+            label1.Text = "V 1.1.0";
             // 
             // button1
             // 
@@ -238,7 +240,7 @@
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(35, 489);
+            linkLabel1.Location = new Point(27, 524);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(290, 15);
             linkLabel1.TabIndex = 26;
@@ -247,11 +249,33 @@
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             linkLabel1.Click += UI_OpenWebsite;
             // 
+            // button4
+            // 
+            button4.Location = new Point(27, 478);
+            button4.Name = "button4";
+            button4.Size = new Size(146, 40);
+            button4.TabIndex = 27;
+            button4.Text = "Stop Autoupdates";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += UI_StopUpdates;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(179, 478);
+            button5.Name = "button5";
+            button5.Size = new Size(146, 40);
+            button5.TabIndex = 28;
+            button5.Text = "Remove Cortana";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += UI_KillCortana;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1023, 519);
+            ClientSize = new Size(1023, 552);
+            Controls.Add(button5);
+            Controls.Add(button4);
             Controls.Add(linkLabel1);
             Controls.Add(button3);
             Controls.Add(label2);
@@ -301,5 +325,7 @@
         private Label label2;
         private Button button3;
         private LinkLabel linkLabel1;
+        private Button button4;
+        private Button button5;
     }
 }

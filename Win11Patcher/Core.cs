@@ -881,8 +881,119 @@ namespace Win11Patcher
 
 
 
-        //Test
-        public void TestMessage()
+
+
+        //StopAutoUpdates
+
+        public void StopUpdates()
+        {
+
+                try
+                {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Trying to Disable AutoUpdates");
+                RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU");
+                    key.SetValue("NoAutoUpdate", 1, RegistryValueKind.DWord);
+                    key.SetValue("AUOptions", 1, RegistryValueKind.DWord);
+                    key.Close();
+                Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("AutoUpdates Blocked via Registry");
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error @AutoUpdate-Registry: " + ex.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+                }
+            try
+            {
+                Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.WriteLine("Trying to Block AutoReboot");
+                RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate");
+                key.SetValue("DoNotConnectToWindowsUpdateInternetLocations", 1, RegistryValueKind.DWord);
+                key.SetValue("DisableWindowsUpdateAccess", 1, RegistryValueKind.DWord);
+                key.Close();
+                Console.ForegroundColor= ConsoleColor.Green;
+                Console.WriteLine("Blocked AutoReboot.");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor= ConsoleColor.Red;
+                Console.WriteLine("Error @setting Reboot Blocker: " + ex.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+
+
+        }
+
+
+
+
+
+
+        //CortanaRipper
+
+
+        public void CortanaRipper()
+        {
+            try
+            {
+                Console.ForegroundColor= ConsoleColor.Yellow;
+                Console.WriteLine("Trying to Disable Cortana...");
+                RegistryKey key = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Policies\Microsoft\Windows\Windows Search");
+                key.SetValue("AllowCortana", 0, RegistryValueKind.DWord);
+                key.Close();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Disabled Cortana");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor= ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Trying to Remove Cortana...");
+                Process p = new Process();
+                p.StartInfo.FileName = "powershell";
+                p.StartInfo.Arguments = "-Command \"Get-AppxPackage -AllUsers *Microsoft.549981C3F5F10* | Remove-AppxPackage\"";
+                p.StartInfo.Verb = "runas";
+                p.StartInfo.UseShellExecute = true;
+                p.Start();
+                p.WaitForExit();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Removed Cortana Core");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Trying to erase Cortana Tasks...");
+                Process.Start("powershell", "-Command \"Get-ScheduledTask -TaskName 'Cortana*' | Disable-ScheduledTask\"");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Removed Cortana Tasks.");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+                    //Test
+                   
+            public void TestMessage()
         {
             try
             {
