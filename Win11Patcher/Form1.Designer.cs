@@ -75,7 +75,7 @@
             // 
             // buttonTaskBar
             // 
-            buttonTaskBar.Location = new Point(27, 340);
+            buttonTaskBar.Location = new Point(27, 294);
             buttonTaskBar.Name = "buttonTaskBar";
             buttonTaskBar.Size = new Size(146, 40);
             buttonTaskBar.TabIndex = 4;
@@ -85,7 +85,7 @@
             // 
             // buttonShowExtensions
             // 
-            buttonShowExtensions.Location = new Point(27, 294);
+            buttonShowExtensions.Location = new Point(27, 340);
             buttonShowExtensions.Name = "buttonShowExtensions";
             buttonShowExtensions.Size = new Size(146, 40);
             buttonShowExtensions.TabIndex = 5;
@@ -95,7 +95,7 @@
             // 
             // buttonBypassEdge
             // 
-            buttonBypassEdge.Location = new Point(179, 202);
+            buttonBypassEdge.Location = new Point(27, 478);
             buttonBypassEdge.Name = "buttonBypassEdge";
             buttonBypassEdge.Size = new Size(146, 40);
             buttonBypassEdge.TabIndex = 6;
@@ -136,7 +136,7 @@
             // 
             // buttonDisableRecall
             // 
-            buttonDisableRecall.Location = new Point(179, 386);
+            buttonDisableRecall.Location = new Point(179, 248);
             buttonDisableRecall.Name = "buttonDisableRecall";
             buttonDisableRecall.Size = new Size(146, 40);
             buttonDisableRecall.TabIndex = 13;
@@ -194,7 +194,7 @@
             label1.Name = "label1";
             label1.Size = new Size(41, 15);
             label1.TabIndex = 20;
-            label1.Text = "V 1.1.0";
+            label1.Text = "V 1.1.3";
             // 
             // button1
             // 
@@ -208,7 +208,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(27, 432);
+            button2.Location = new Point(179, 386);
             button2.Name = "button2";
             button2.Size = new Size(146, 40);
             button2.TabIndex = 22;
@@ -229,7 +229,7 @@
             // button3
             // 
             button3.ImageAlign = ContentAlignment.MiddleRight;
-            button3.Location = new Point(179, 248);
+            button3.Location = new Point(27, 432);
             button3.Name = "button3";
             button3.Size = new Size(146, 40);
             button3.TabIndex = 24;
@@ -251,11 +251,11 @@
             // 
             // button4
             // 
-            button4.Location = new Point(27, 478);
+            button4.Location = new Point(179, 202);
             button4.Name = "button4";
             button4.Size = new Size(146, 40);
             button4.TabIndex = 27;
-            button4.Text = "Stop Autoupdates";
+            button4.Text = "Disable Autoupdates";
             button4.UseVisualStyleBackColor = true;
             button4.Click += UI_StopUpdates;
             // 
