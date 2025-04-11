@@ -194,7 +194,7 @@
             label1.Name = "label1";
             label1.Size = new Size(41, 15);
             label1.TabIndex = 20;
-            label1.Text = "V 1.1.3";
+            label1.Text = "V 1.1.4";
             // 
             // button1
             // 
