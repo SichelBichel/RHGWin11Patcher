@@ -2,6 +2,7 @@ Customize and Debloat Windows 11
 Take full control of your Windows 11 experience with the Windows 11 Patcher by ReHoGa Interactive. Whether you're missing the simplicity of Windows 10 or just want to remove the clutter, this lightweight tool gives you the freedom to tweak, patch, and clean up your system — no activation required.
 
 🔧 Features:
+
 ✅ Restore the classic context menu (Windows 10 style)
 
 ✅ Bring back the classic File Explorer
