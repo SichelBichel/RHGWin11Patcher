@@ -12,7 +12,7 @@ namespace Win11Patcher
 {
     internal class Core
     {
-        //ToDo:  SetExplorerTo DieserPC / -
+        //ToDo:  SetExplorerTo DieserPC /
 
 
 
