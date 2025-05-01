@@ -232,7 +232,7 @@ namespace Win11Patcher
 
         public void InstallChrome()
         {
-            string searchQuery = "chrome download"; // Deine Suchanfrage
+            string searchQuery = "chrome download"; 
             string googleSearchUrl = $"https://www.google.com/search?q={Uri.EscapeDataString(searchQuery)}";
 
             try
@@ -406,7 +406,6 @@ namespace Win11Patcher
             Console.WriteLine("Starting OneDrive removal...");
             Console.ForegroundColor = ConsoleColor.White;
 
-            // Stoppe OneDrive, falls es läuft
             try
             {
                 Console.WriteLine("Killing OneDrive processes...");
@@ -425,7 +424,6 @@ namespace Win11Patcher
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            // Deinstalliere OneDrive über die Windows Setup
             try
             {
                 Console.WriteLine("Uninstalling OneDrive...");
@@ -456,7 +454,6 @@ namespace Win11Patcher
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            // Entferne OneDrive aus der Registrierung
             try
             {
                 Console.WriteLine("Removing OneDrive registry entries...");
@@ -487,12 +484,10 @@ namespace Win11Patcher
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            // Entferne Taskleisten- und Startmenü-Verknüpfungen
             try
             {
                 Console.WriteLine("Removing OneDrive from Taskbar and Start Menu...");
 
-                // Taskbar shortcuts
                 string taskbarPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Roaming", "Microsoft", "Internet Explorer", "Quick Launch", "User Pinned", "TaskBar");
                 string taskbarShortcut = Path.Combine(taskbarPath, "OneDrive.lnk");
                 if (File.Exists(taskbarShortcut))
@@ -501,7 +496,6 @@ namespace Win11Patcher
                     Console.WriteLine("OneDrive Taskbar shortcut removed.");
                 }
 
-                // Start Menu shortcuts
                 string startMenuPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "AppData", "Roaming", "Microsoft", "Windows", "Start Menu", "Programs");
                 string[] startMenuShortcuts = Directory.GetFiles(startMenuPath, "*OneDrive*.lnk");
                 foreach (var shortcut in startMenuShortcuts)
@@ -517,7 +511,6 @@ namespace Win11Patcher
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            // Entferne OneDrive aus Autostart
             try
             {
                 Console.WriteLine("Removing OneDrive from Autostart...");
@@ -539,14 +532,11 @@ namespace Win11Patcher
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            // Entferne OneDrive-Daten im Benutzerprofil, wenn gewünscht
             string oneDriveFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "OneDrive");
             try
             {
                 if (Directory.Exists(oneDriveFolder))
                 {
-                    // Nur löschen, wenn du möchtest, dass der OneDrive-Ordner auch gelöscht wird:
-                    // Directory.Delete(oneDriveFolder, recursive: true);
                     Console.WriteLine("OneDrive folder remains intact.");
                 }
             }
